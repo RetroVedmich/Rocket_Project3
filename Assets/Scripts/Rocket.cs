@@ -74,6 +74,8 @@ public class Rocket : MonoBehaviour
             case "Finish":
                 Debug.Log("Вы победили!");
                 break;
+            case "StartPlatform":
+                break;
             default:
                 Debug.Log("Ракета взорвалась");
                 break;

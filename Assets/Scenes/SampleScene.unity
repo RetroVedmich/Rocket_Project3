@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateVelocity: 80.9
-  flySpeed: 100
+  flySpeed: 150
 --- !u!54 &80863219
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2747,7 +2747,7 @@ GameObject:
   - component: {fileID: 1972782802}
   m_Layer: 0
   m_Name: Platform
-  m_TagString: Untagged
+  m_TagString: StartPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
