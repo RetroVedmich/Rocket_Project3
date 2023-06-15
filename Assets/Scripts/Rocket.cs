@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class Rocket : MonoBehaviour
@@ -8,14 +9,19 @@ public class Rocket : MonoBehaviour
 
     [SerializeField] private float flySpeed = 100f;
 
+    [SerializeField] private int _level;
+    
     private Rigidbody _rigidBody;
 
     private AudioSource _audioSource;
+
+    private bool _readyToCollision;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
+        _readyToCollision = true;
     }
 
     void Update()
@@ -65,6 +71,9 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!_readyToCollision) return;
+
+        _readyToCollision = false;
         switch (collision.gameObject.tag)
         {
             case "Battery":
@@ -72,12 +81,18 @@ public class Rocket : MonoBehaviour
                 Destroy(collision.gameObject);
                 break;
             case "Finish":
-                Debug.Log("Вы победили!");
+                if (_level >= 2) _level = 0;
+                else _level += 1;
+                SceneManager.LoadScene(_level);
+                Debug.Log(_level);
                 break;
             case "StartPlatform":
+                _readyToCollision = true;
                 break;
             default:
                 Debug.Log("Ракета взорвалась");
+                _level = 0;
+                SceneManager.LoadScene(_level);
                 break;
         }
     }
