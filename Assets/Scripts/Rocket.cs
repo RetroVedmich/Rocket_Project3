@@ -9,31 +9,37 @@ public class Rocket : MonoBehaviour
 
     [SerializeField] private float flySpeed = 100f;
 
-    [SerializeField] private int _level;
+    [SerializeField] private AudioClip flySound;
+
+    [SerializeField] private AudioClip explodeSound;
+
+    [SerializeField] private AudioClip finishSound;
+
+    private int _level;
     
     private Rigidbody _rigidBody;
 
     private AudioSource _audioSource;
 
-    private bool _readyToCollision;
+    private enum State { Playing, Dead, NextLevel }
+
+    private State _state = State.Playing;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
-        _readyToCollision = true;
+        _state = State.Playing;
     }
 
     void Update()
     {
-        ProcessInput();
-    }
+        if(_state == State.Playing)
+        {
+            Launch();
 
-    private void ProcessInput()
-    {
-        Launch();
-
-        Rotation();
+            Rotation();
+        }
     }
 
     private void Launch()
@@ -44,7 +50,7 @@ public class Rocket : MonoBehaviour
         {
             _rigidBody.AddRelativeForce(Vector3.up * launchSpeed);
 
-            if (!_audioSource.isPlaying) _audioSource.Play();
+            if (!_audioSource.isPlaying) _audioSource.PlayOneShot(flySound);
         }
 
         else _audioSource.Pause();
@@ -69,11 +75,23 @@ public class Rocket : MonoBehaviour
         _rigidBody.freezeRotation = false;
     }
 
+    private void LoadFirstLevel()
+    {
+        _level = 0;
+        SceneManager.LoadScene(_level);
+    }
+
+    private void LoadNextLevel()
+    {
+        _level++;
+        if (_level > 2) _level = 0;
+        SceneManager.LoadScene(_level);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (!_readyToCollision) return;
+        if (_state != State.Playing) return;
 
-        _readyToCollision = false;
         switch (collision.gameObject.tag)
         {
             case "Battery":
@@ -81,18 +99,17 @@ public class Rocket : MonoBehaviour
                 Destroy(collision.gameObject);
                 break;
             case "Finish":
-                if (_level >= 2) _level = 0;
-                else _level += 1;
-                SceneManager.LoadScene(_level);
-                Debug.Log(_level);
+                _state = State.NextLevel;
+                _audioSource.PlayOneShot(finishSound);
+                Invoke("LoadNextLevel", 1.5f);
                 break;
             case "StartPlatform":
-                _readyToCollision = true;
                 break;
             default:
                 Debug.Log("Ракета взорвалась");
-                _level = 0;
-                SceneManager.LoadScene(_level);
+                _audioSource.PlayOneShot(explodeSound);
+                _state = State.Dead;
+                Invoke("LoadFirstLevel", 1.5f);
                 break;
         }
     }

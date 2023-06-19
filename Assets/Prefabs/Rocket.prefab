@@ -1257,7 +1257,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: cecf7a0f0684f40438a9f012b0f24f81, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1355,6 +1355,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateVelocity: 80.9
   flySpeed: 150
+  flySound: {fileID: 8300000, guid: cecf7a0f0684f40438a9f012b0f24f81, type: 3}
+  explodeSound: {fileID: 8300000, guid: cf60db03a8eb73e4294d5d2985d276c9, type: 3}
+  finishSound: {fileID: 8300000, guid: 8bc474a63efac9a408e014bee2fa7d56, type: 3}
 --- !u!1 &8225566715571734844
 GameObject:
   m_ObjectHideFlags: 0
