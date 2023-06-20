@@ -15,6 +15,10 @@ public class Rocket : MonoBehaviour
 
     [SerializeField] private AudioClip finishSound;
 
+    [SerializeField] private ParticleSystem rocketFly;
+
+    [SerializeField] private ParticleSystem rocketExplotion;
+
     private int _level;
     
     private Rigidbody _rigidBody;
@@ -50,10 +54,20 @@ public class Rocket : MonoBehaviour
         {
             _rigidBody.AddRelativeForce(Vector3.up * launchSpeed);
 
-            if (!_audioSource.isPlaying) _audioSource.PlayOneShot(flySound);
+            if (!_audioSource.isPlaying)
+            {
+                _audioSource.PlayOneShot(flySound);
+
+                rocketFly.Play();
+            }
         }
 
-        else _audioSource.Pause();
+        else
+        {
+            _audioSource.Pause();
+
+            rocketFly.Stop();
+        }
     }
 
     private void Rotation()
@@ -90,7 +104,7 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (_state != State.Playing) return;
+        if (_state == State.NextLevel || _state == State.Dead) return;
 
         switch (collision.gameObject.tag)
         {
@@ -109,6 +123,7 @@ public class Rocket : MonoBehaviour
                 Debug.Log("Ракета взорвалась");
                 _audioSource.PlayOneShot(explodeSound);
                 _state = State.Dead;
+                rocketExplotion.Play();
                 Invoke("LoadFirstLevel", 1.5f);
                 break;
         }
