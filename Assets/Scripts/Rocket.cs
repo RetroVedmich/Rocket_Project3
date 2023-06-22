@@ -19,6 +19,8 @@ public class Rocket : MonoBehaviour
 
     [SerializeField] private ParticleSystem rocketExplotion;
 
+    [SerializeField] private ParticleSystem rocketFinish;
+
     private int _level;
     
     private Rigidbody _rigidBody;
@@ -115,6 +117,7 @@ public class Rocket : MonoBehaviour
             case "Finish":
                 _state = State.NextLevel;
                 _audioSource.PlayOneShot(finishSound);
+                rocketFinish.Play();
                 Invoke("LoadNextLevel", 1.5f);
                 break;
             case "StartPlatform":

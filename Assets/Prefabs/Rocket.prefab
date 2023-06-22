@@ -1362,6 +1362,7 @@ MonoBehaviour:
   finishSound: {fileID: 8300000, guid: 8bc474a63efac9a408e014bee2fa7d56, type: 3}
   rocketFly: {fileID: 2601361444067627874}
   rocketExplotion: {fileID: 2622790242643943795}
+  rocketFinish: {fileID: 0}
 --- !u!1 &8225566715571734844
 GameObject:
   m_ObjectHideFlags: 0
