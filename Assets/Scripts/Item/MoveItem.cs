@@ -24,7 +24,7 @@ public class MoveItem : MonoBehaviour
     {
         moveProgress = Mathf.PingPong(Time.time, 1);
 
-        Vector3 offset = movePosition * moveProgress;
+        Vector3 offset = movePosition * moveProgress * moveSpeed;
 
         transform.position = _startPosition + offset;
     }

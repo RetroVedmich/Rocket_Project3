@@ -36,6 +36,7 @@ public class Rocket : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
         _state = State.Playing;
+        _level = SceneManager.GetActiveScene().buildIndex;
     }
 
     void Update()
@@ -100,7 +101,7 @@ public class Rocket : MonoBehaviour
     private void LoadNextLevel()
     {
         _level++;
-        if (_level > 2) _level = 0;
+        if (_level > 4) _level = 0;
         SceneManager.LoadScene(_level);
     }
 
