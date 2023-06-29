@@ -22,9 +22,9 @@ public class MoveItem : MonoBehaviour
     
     void Update()
     {
-        moveProgress = Mathf.PingPong(Time.time, 1);
+        moveProgress = Mathf.PingPong(Time.time * moveSpeed, 1);
 
-        Vector3 offset = movePosition * moveProgress * moveSpeed;
+        Vector3 offset = movePosition * moveProgress;
 
         transform.position = _startPosition + offset;
     }
