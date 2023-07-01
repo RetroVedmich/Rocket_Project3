@@ -27,6 +27,8 @@ public class Rocket : MonoBehaviour
 
     private AudioSource _audioSource;
 
+    private bool _collisionOff;
+
     private enum State { Playing, Dead, NextLevel }
 
     private State _state = State.Playing;
@@ -46,6 +48,21 @@ public class Rocket : MonoBehaviour
             Launch();
 
             Rotation();
+        }
+
+        if(Debug.isDebugBuild) DebugKey();
+    }
+
+    private void DebugKey()
+    {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            LoadNextLevel();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            _collisionOff = !_collisionOff;
         }
     }
 
@@ -94,20 +111,20 @@ public class Rocket : MonoBehaviour
 
     private void LoadFirstLevel()
     {
-        _level = 0;
-        SceneManager.LoadScene(_level);
+        SceneManager.LoadScene(0);
     }
 
     private void LoadNextLevel()
     {
-        _level++;
-        if (_level > 4) _level = 0;
-        SceneManager.LoadScene(_level);
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextLevelIndex = currentLevelIndex + 1;
+        if (nextLevelIndex == SceneManager.sceneCountInBuildSettings) nextLevelIndex = 0;
+        SceneManager.LoadScene(nextLevelIndex);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (_state == State.NextLevel || _state == State.Dead) return;
+        if (_state == State.NextLevel || _state == State.Dead || _collisionOff) return;
 
         switch (collision.gameObject.tag)
         {
